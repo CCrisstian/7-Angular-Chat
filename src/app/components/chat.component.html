@@ -1,0 +1,46 @@
+<div class="card m-4">
+    <div class="card-header">
+        <ul class="nav nav-pilss card-header-pills">
+            <li class="nav-item me-2" *ngIf="!connected">
+                <input [(ngModel)]="message.username" class="form-control" placeholder="Tu Username..." name="username">
+            </li>
+            <li class="nav-item" *ngIf="!connected">
+                <button class="btn btn-success" type="button" (click)="connect()" [disabled]="!message.username">
+                    Conectar
+                </button>
+            </li>
+            <li class="nav-item" *ngIf="connected">
+                <button class="btn btn-warning" type="button" (click)="disconnect()">
+                    Desconectar Chat
+                </button>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="card-body" style="overflow-y: scroll; height: 360px;" *ngIf="connected">
+        <ul class="list-group list-group-item-flush">
+            <li class="list-group-item list-group-item-light" *ngFor="let message of messages">
+                @if (message.type == 'NEW_USER') {
+                    {{message.date | date: 'shortTime'}}: {{message.text}} conectado! &#64; <span [ngStyle]="{'color': message.color, 'font-weight': 'bold'}">{{message.username}}</span>
+                } @else if(message.type == 'MESSAGE'){
+                    {{message.date | date: 'shortTime'}} <span [ngStyle]="{'color': message.color, 'font-weight': 'bold'}">{{message.username}}</span>: {{message.text}}
+                }
+            </li>
+        </ul>
+    </div>
+
+    <div class="card-footer" *ngIf="connected">
+        <form (ngSubmit)="onSendMessage()">
+            <div class="row">
+                <div class="col">
+                    <input class="form-control" name="text" [(ngModel)]="message.text"
+                        placeholder="Escribe un mensaje...">
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
